@@ -65,19 +65,25 @@ def callback():
 
         try:
             recently_played_songs = res.json().get('items')
+            print(recently_played_songs)
         except (ValueError, requests.exceptions.JSONDecodeError) as e:
             return f'Error: {e}'
+
+        isrcarr = []
 
         if recently_played_songs:
             for song in recently_played_songs:
                 track_name = song['track']['name']
                 isrc = song['track']['external_ids']['isrc']
+                isrcarr.append(isrc)
+
                 print(f"{track_name} - ISRC: {isrc}")
 
+            print(isrcarr)
             return "Check the terminal"
         else:
             return "No recently played songs found."
-
+#chec
     return 'Authentication failed'
 
 if __name__ == '__main__':
