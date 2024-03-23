@@ -35,8 +35,8 @@ def makeJSON(tracks):
         artist_name = track['track']['artists'][0]['name']
         isrc = track['track']['external_ids']['isrc'] if 'isrc' in track['track']['external_ids'] else 'N/A'
         # print(f"Track: {track_name}, ISRC: {isrc}")
-        metadata = {"track": track_name, "artist": artist_name, "isrc": isrc}
-        song_info = {"metadata": metadata, "sentiment": getSentiment(isrc)}
+        metadata = {"track": track_name, "artist": artist_name}
+        song_info = {"id": isrc, "metadata": metadata, "sentiment": getSentiment(isrc)}
         # print(song_info)
         songs.append(song_info)
     data = {"songs": songs}
