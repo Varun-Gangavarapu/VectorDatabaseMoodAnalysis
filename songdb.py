@@ -22,10 +22,8 @@ def get_playlist_tracks(playlist_id):
     return tracks
 
 tracks = get_playlist_tracks(playlist_id)
-for track in tracks:
-    num=num+1
-    track_name = track['track']['name']
-    isrc = track['track']['external_ids']['isrc'] if 'isrc' in track['track']['external_ids'] else 'N/A'
-    print(f"Track: {track_name}, ISRC: {isrc}")
-    print(f"Total tracks: {num}")
+
+
+
+
 
