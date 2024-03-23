@@ -1,10 +1,9 @@
-from flask import Flask, redirect, request, render_template, url_for
-from flask_cors import CORS
+from flask import Flask, redirect, request
 import requests
 import base64
+import lyricsRecentlyPlayed
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
 
 # Spotify API credentials
 CLIENT_ID = '3a8e09e2d4344d69b2d18676ab1e2b87'
@@ -14,11 +13,11 @@ SCOPE = 'user-read-recently-played'
 
 
 
-@app.route('/')
-def home():
-    return 'Welcome to the Spotify API!'
+# @app.route('/')
+# def home():
+#     return 'Welcome to the Spotify API!'
 
-@app.route('/login')
+@app.route('/')
 def login():
     auth_url = 'https://accounts.spotify.com/authorize'
     payload = {
@@ -71,26 +70,19 @@ def callback():
         except (ValueError, requests.exceptions.JSONDecodeError) as e:
             return f'Error: {e}'
 
-        isrcarr = []
 
         if recently_played_songs:
+            lyricsRecentlyPlayed.makeJSON(recently_played_songs)
             for song in recently_played_songs:
                 track_name = song['track']['name']
                 isrc = song['track']['external_ids']['isrc']
-                isrcarr.append(isrc)
 
                 print(f"{track_name} - ISRC: {isrc}")
-
-            print(isrcarr)
-            return redirect(url_for('redirection'))
+            return "Check the terminal"
         else:
             return "No recently played songs found."
 
     return 'Authentication failed'
-
-@app.route('/redirection')
-def redirection():
-    return render_template('page2.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
