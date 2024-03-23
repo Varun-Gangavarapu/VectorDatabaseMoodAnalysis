@@ -43,7 +43,7 @@ for item in tracks:
         }
     })
 
-with open('spotify_data.json', 'w', encoding='utf-8') as f:
+with open('audiofeaturesdata.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, indent=4, ensure_ascii=False)
 
 
