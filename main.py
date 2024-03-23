@@ -1,4 +1,5 @@
 from flask import Flask, redirect, request
+from lyrics import getSentiment
 import requests
 import base64
 
@@ -10,7 +11,7 @@ CLIENT_SECRET = '02f562a80d1b4add8de4da6b6909ac13'
 REDIRECT_URI = 'http://localhost:5000/callback'
 SCOPE = 'user-read-recently-played'
 
-
+isrcArray=[]
 
 # @app.route('/')
 # def home():
@@ -18,6 +19,7 @@ SCOPE = 'user-read-recently-played'
 
 @app.route('/')
 def login():
+
     auth_url = 'https://accounts.spotify.com/authorize'
     payload = {
         'client_id': CLIENT_ID,
@@ -26,10 +28,13 @@ def login():
         'scope': SCOPE
     }
     res = requests.get(auth_url, params=payload)
+
     return redirect(res.url)
 
 @app.route('/callback')
 def callback():
+    print("hello")
+
     code = request.args.get('code')
     if code:
         # Step 3: Request access token
@@ -65,25 +70,21 @@ def callback():
 
         try:
             recently_played_songs = res.json().get('items')
-            print(recently_played_songs)
         except (ValueError, requests.exceptions.JSONDecodeError) as e:
             return f'Error: {e}'
-
-        isrcarr = []
 
         if recently_played_songs:
             for song in recently_played_songs:
                 track_name = song['track']['name']
                 isrc = song['track']['external_ids']['isrc']
-                isrcarr.append(isrc)
-
+                getSentiment(isrc)
+                isrcArray.append(isrc)
                 print(f"{track_name} - ISRC: {isrc}")
 
-            print(isrcarr)
             return "Check the terminal"
         else:
             return "No recently played songs found."
-#chec
+
     return 'Authentication failed'
 
 if __name__ == '__main__':
