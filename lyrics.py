@@ -19,9 +19,14 @@ def getSentiment(isrc):
     print("API Call: " + api_call)
     print()
     print()
-    result = data['lyrics']['lyrics_body']
+    try:
+        result = data['lyrics']['lyrics_body']
+    except TypeError:
+        print("invlaid isrc")
+        return
+
     result = result[:511]
     emotions = classifier(result)[0]
-    print('\n'.join('{}: {}'.format(*k) for k in enumerate(emotions)))
+    print(emotions)
 
 
