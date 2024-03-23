@@ -1,6 +1,7 @@
 from flask import Flask, redirect, request
 import requests
 import base64
+import lyricsRecentlyPlayed
 
 app = Flask(__name__)
 
@@ -69,17 +70,14 @@ def callback():
         except (ValueError, requests.exceptions.JSONDecodeError) as e:
             return f'Error: {e}'
 
-        isrcarr = []
 
         if recently_played_songs:
+            lyricsRecentlyPlayed.makeJSON(recently_played_songs)
             for song in recently_played_songs:
                 track_name = song['track']['name']
                 isrc = song['track']['external_ids']['isrc']
-                isrcarr.append(isrc)
 
                 print(f"{track_name} - ISRC: {isrc}")
-
-            print(isrcarr)
             return "Check the terminal"
         else:
             return "No recently played songs found."
