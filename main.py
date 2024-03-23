@@ -10,6 +10,12 @@ CLIENT_SECRET = '02f562a80d1b4add8de4da6b6909ac13'
 REDIRECT_URI = 'http://localhost:5000/callback'
 SCOPE = 'user-read-recently-played'
 
+
+
+# @app.route('/')
+# def home():
+#     return 'Welcome to the Spotify API!'
+
 @app.route('/')
 def login():
     auth_url = 'https://accounts.spotify.com/authorize'
@@ -40,7 +46,6 @@ def callback():
         }
         res = requests.post(token_url, data=payload, headers=headers)
 
-        # Check if the request was successful
         if res.status_code not in range(200, 299):
             return f'Error: {res.status_code} - {res.text}'
 
@@ -49,14 +54,12 @@ def callback():
         except (ValueError, requests.exceptions.JSONDecodeError) as e:
             return f'Error: {e}'
 
-        # Step 4: Get recently played songs
         recently_played_url = 'https://api.spotify.com/v1/me/player/recently-played'
         headers = {
             'Authorization': f'Bearer {access_token}'
         }
         res = requests.get(recently_played_url, headers=headers)
 
-        # Check if the request was successful
         if res.status_code not in range(200, 299):
             return f'Error: {res.status_code} - {res.text}'
 
@@ -67,8 +70,11 @@ def callback():
 
         if recently_played_songs:
             for song in recently_played_songs:
-                print(song['track']['name'])
-            return "Check the terminal for the recently played songs!"
+                track_name = song['track']['name']
+                isrc = song['track']['external_ids']['isrc']
+                print(f"{track_name} - ISRC: {isrc}")
+
+            return "Check the terminal"
         else:
             return "No recently played songs found."
 
