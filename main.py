@@ -83,7 +83,7 @@ def callback():
             return "Check the terminal"
         else:
             return "No recently played songs found."
-#chec
+
     return 'Authentication failed'
 
 if __name__ == '__main__':
