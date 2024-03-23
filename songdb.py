@@ -13,3 +13,7 @@ def get_access_token(client_id, client_secret):
     })
     auth_response_data = auth_response.json()
     return auth_response_data.get('access_token', None)
+
+
+
+
