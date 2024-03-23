@@ -7,6 +7,9 @@ import json
 base_url = "https://api.musixmatch.com/ws/1.1/"
 apikey = "&apikey=82af858c39c7035647e9a896acf1a389"
 # isrc = input("Enter the ISRC: ")
+classifier = pipeline("text-classification", model="j-hartmann/emotion-english-distilroberta-base", top_k=None)
+
+
 def getSentiment(isrc):
     api_call = base_url + 'matcher.lyrics.get?track_isrc=' + isrc + apikey
     request = requests.get(api_call)
@@ -16,7 +19,9 @@ def getSentiment(isrc):
     print("API Call: " + api_call)
     print()
     print()
-    classifier = pipeline("text-classification", model="j-hartmann/emotion-english-distilroberta-base", top_k=None)
-    emotions = classifier(data['lyrics']['lyrics_body'])[0]
+    result = data['lyrics']['lyrics_body']
+    result = result[:511]
+    emotions = classifier(result)[0]
     print('\n'.join('{}: {}'.format(*k) for k in enumerate(emotions)))
+
 

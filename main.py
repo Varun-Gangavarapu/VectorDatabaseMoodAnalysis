@@ -11,7 +11,7 @@ CLIENT_SECRET = '02f562a80d1b4add8de4da6b6909ac13'
 REDIRECT_URI = 'http://localhost:5000/callback'
 SCOPE = 'user-read-recently-played'
 
-isrcArray=[]
+isrcSet=set()
 
 # @app.route('/')
 # def home():
@@ -77,8 +77,8 @@ def callback():
             for song in recently_played_songs:
                 track_name = song['track']['name']
                 isrc = song['track']['external_ids']['isrc']
+                isrcSet.add(isrc)
                 getSentiment(isrc)
-                isrcArray.append(isrc)
                 print(f"{track_name} - ISRC: {isrc}")
 
             return "Check the terminal"
