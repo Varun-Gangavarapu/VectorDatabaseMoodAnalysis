@@ -1,10 +1,13 @@
-from flask import Flask, redirect, request
+from flask import Flask, redirect, request, url_for, render_template
+from flask_cors import CORS
 import requests
 import base64
+import json
 import lyricsRecentlyPlayed
 import audioFeaturesdb, test
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
 
 # Spotify API credentials
 CLIENT_ID = '3a8e09e2d4344d69b2d18676ab1e2b87'
@@ -14,11 +17,11 @@ SCOPE = 'user-read-recently-played'
 
 
 
-# @app.route('/')
-# def home():
-#     return 'Welcome to the Spotify API!'
-
 @app.route('/')
+def home():
+    return 'Welcome to the Spotify API!'
+
+@app.route('/login')
 def login():
     auth_url = 'https://accounts.spotify.com/authorize'
     payload = {
@@ -67,7 +70,7 @@ def callback():
 
         try:
             recently_played_songs = res.json().get('items')
-            print(recently_played_songs)
+            # print(recently_played_songs)
         except (ValueError, requests.exceptions.JSONDecodeError) as e:
             return f'Error: {e}'
 
@@ -75,7 +78,8 @@ def callback():
         if recently_played_songs:
             #audioFeaturesdb.getFeaturesRecent(recently_played_songs)
             lyricsRecentlyPlayed.makeJSON(recently_played_songs)
-            test.sentimentRecent()
+
+
 
 
 
@@ -84,12 +88,39 @@ def callback():
                 track_name = song['track']['name']
                 isrc = song['track']['external_ids']['isrc']
 
-                print(f"{track_name} - ISRC: {isrc}")
-            return "Check the terminal"
+                # print(f"{track_name} - ISRC: {isrc}")
+            return redirect(url_for('redirection'))
         else:
             return "No recently played songs found."
 
     return 'Authentication failed'
+
+import json
+
+def extract_songs(query_response):
+    try:
+        # Assuming query_response['matches'] contains the relevant song data
+        matches = query_response.get('matches', [])
+
+        # Extract song information
+        song_list = [{'title': match['metadata']['track'], 'artist': match['metadata']['artist']} for match in matches]
+
+        return song_list
+    except KeyError as e:
+        print(f"Error in extracting song data: {e}")
+        return []
+# Example usage
+
+
+
+@app.route('/redirection')
+def redirection():
+    arr = test.sentimentRecent()
+    print(arr[0])
+    arrs = extract_songs(arr[0])
+
+    return render_template('page2.html', songs_array=arrs, emotion_array=arr[1])
+
 
 if __name__ == '__main__':
     app.run(debug=True)
