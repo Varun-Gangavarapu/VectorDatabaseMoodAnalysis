@@ -14,7 +14,8 @@ class Vec_DB:
         return self.index.query(
             vector=target,
             top_k=k,
-            include_values=False
+            include_values=False,
+            include_metadata=True
         )
 
 

@@ -14,21 +14,5 @@
             "tempo": 121.002,
             "valence": 0.412
         }
-    },
-    {
-        "track_name": "Idea 9 (Slowed + Reverb)",
-        "isrc": "QM3DF2264903",
-        "artist": "Gibran Alcocer",
-        "features": {
-            "acousticness": 0.973,
-            "danceability": 0.38,
-            "energy": 0.0853,
-            "instrumentalness": 0.841,
-            "liveness": 0.11,
-            "loudness": -28.249,
-            "speechiness": 0.0311,
-            "tempo": 97.753,
-            "valence": 0.232
-        }
     }
 ]
