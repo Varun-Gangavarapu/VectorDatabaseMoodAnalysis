@@ -195,6 +195,29 @@ def get_top_k_sentiments(values, k):
     return top_k_sentiments
 
 
+def get_top_k_sentiments_percentage(values, k):
+    map = {}
+    for i in range(len(values)):
+        map[sentiments[i]] = values[i]
+
+    # Sort the dictionary by values
+    sorted_mapping = sorted(map.items(), key=lambda x: -x[1])
+
+    # Print the labels and values sorted by values
+    i = 0
+    top_k_sentiments = []
+    for label, value in sorted_mapping:
+        top_k_sentiments.append(value)
+        i += 1
+        if i == k:
+            break
+
+    sum_sentiments = sum(top_k_sentiments)
+    for i in range(len(top_k_sentiments)):
+        top_k_sentiments[i] /= sum_sentiments
+    return top_k_sentiments
+
+
 def get_string(arr):
     s = ""
     for item in arr:
@@ -218,6 +241,7 @@ if __name__ == "__main__":
     #     top_k=5,
     # )
 
-    print(get_top_k_sentiments(compute_user_vector_sentiments('dataRecentlyPlayed.json'), 5))
+    print(get_top_k_sentiments_percentage(
+        compute_user_vector_sentiments('dataRecentlyPlayed.json'), 5))
 
     # view_sorted('0.121713251, 0.102738664, 0.0947829857, 0.0133372182, 0.588854134, 0.044840876, 0.112225957, 0.108248115, 0.0675252303, 0.355283707, 0.0832770616, 0.0987608209, 0.0580379404, 0.345796406, 0.0737897679, 0.0540601, 0.341818571, 0.0698119327, 0.301095694, 0.0290890466, 0.316847533')
