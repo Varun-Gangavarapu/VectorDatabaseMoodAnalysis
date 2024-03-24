@@ -1,5 +1,6 @@
 from pinecone import Pinecone
 
+
 class Vec_DB:
     # Default api key is for Lyrics
     def __init__(self, api_key):
@@ -14,18 +15,6 @@ class Vec_DB:
         return self.index.query(
             vector=target,
             top_k=k,
-            include_values=False
+            include_values=False,
+            include_metadata=True
         )
-
-
-if __name__ == "__main__":
-    vec_db = Vec_DB()
-
-    # vectors = []
-    # for i in range(5):
-    #     vectors.append(
-    #         {"id": "vec"+str(i), "values": np.random.rand(21), "metadata": {"name": "happy"}})
-    # vec_db.add_vectors(vectors)
-
-    # print(np.random.rand(21))
-    # print(vec_db.get_knn(np.random.rand(21).tolist(), 3))

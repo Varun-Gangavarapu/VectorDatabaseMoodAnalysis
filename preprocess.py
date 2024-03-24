@@ -176,6 +176,25 @@ def view_sorted(input_string):
         print(f"{val:.2f} ({scaled_val:.2f}%)")
 
 
+def get_top_k_sentiments(values, k):
+    map = {}
+    for i in range(len(values)):
+        map[sentiments[i]] = values[i]
+
+    # Sort the dictionary by values
+    sorted_mapping = sorted(map.items(), key=lambda x: -x[1])
+
+    # Print the labels and values sorted by values
+    i = 0
+    top_k_sentiments = []
+    for label, value in sorted_mapping:
+        top_k_sentiments.append(label)
+        i += 1
+        if i == k:
+            break
+    return top_k_sentiments
+
+
 def get_string(arr):
     s = ""
     for item in arr:
@@ -190,13 +209,15 @@ if __name__ == "__main__":
     #     get_values(sum_batch(data))
     # )
 
-    vec_db = Vec_DB('7f339788-9a19-440f-a013-bd2cc0cb73f1')
+    # vec_db = Vec_DB('7f339788-9a19-440f-a013-bd2cc0cb73f1')
     # print(vec_db.get_knn(
     #     target=compute_user_vector_sentiments('dataRecentlyPlayed.json'), k=5
     # ))
-    vec_db.index.query(
-        vector=compute_user_vector_sentiments('dataRecentlyPlayed.json'),
-        top_k=5,
-    )
+    # vec_db.index.query(
+    #     vector=compute_user_vector_sentiments('dataRecentlyPlayed.json'),
+    #     top_k=5,
+    # )
+
+    print(get_top_k_sentiments(compute_user_vector_sentiments('dataRecentlyPlayed.json'), 5))
 
     # view_sorted('0.121713251, 0.102738664, 0.0947829857, 0.0133372182, 0.588854134, 0.044840876, 0.112225957, 0.108248115, 0.0675252303, 0.355283707, 0.0832770616, 0.0987608209, 0.0580379404, 0.345796406, 0.0737897679, 0.0540601, 0.341818571, 0.0698119327, 0.301095694, 0.0290890466, 0.316847533')
