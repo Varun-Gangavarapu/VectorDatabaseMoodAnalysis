@@ -1,25 +1,22 @@
-from flask import Flask, redirect, request, url_for, render_template
-from flask_cors import CORS
+from flask import Flask, redirect, request, render_template, url_for
 import requests
 import base64
-import json
 import lyricsRecentlyPlayed
 import audioFeaturesdb, test
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
 
 # Spotify API credentials
 CLIENT_ID = '3a8e09e2d4344d69b2d18676ab1e2b87'
 CLIENT_SECRET = '02f562a80d1b4add8de4da6b6909ac13'
-REDIRECT_URI = 'http://localhost:5000/callback'
+REDIRECT_URI = 'http://127.0.0.1:5000/callback'
 SCOPE = 'user-read-recently-played'
 
 
 
 @app.route('/')
 def home():
-    return 'Welcome to the Spotify API!'
+    return render_template('index.html')
 
 @app.route('/login')
 def login():
@@ -78,8 +75,7 @@ def callback():
         if recently_played_songs:
             #audioFeaturesdb.getFeaturesRecent(recently_played_songs)
             lyricsRecentlyPlayed.makeJSON(recently_played_songs)
-
-
+            test.sentimentRecent()
 
 
 
@@ -95,32 +91,29 @@ def callback():
 
     return 'Authentication failed'
 
-import json
-
 def extract_songs(query_response):
     try:
         # Assuming query_response['matches'] contains the relevant song data
         matches = query_response.get('matches', [])
 
         # Extract song information
-        song_list = [{'title': match['metadata']['track'], 'artist': match['metadata']['artist']} for match in matches]
+        song_list = [{'title': match['metadata']['track'], 'artist': match['metadata']['artist']} for match in
+                     matches]
 
         return song_list
     except KeyError as e:
         print(f"Error in extracting song data: {e}")
         return []
+
 # Example usage
-
-
 
 @app.route('/redirection')
 def redirection():
     arr = test.sentimentRecent()
-    print(arr[0])
+    print(arr)
     arrs = extract_songs(arr[0])
 
     return render_template('page2.html', songs_array=arrs, emotion_array=arr[1])
-
 
 if __name__ == '__main__':
     app.run(debug=True)

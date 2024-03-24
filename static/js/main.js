@@ -55,6 +55,10 @@ function login() {
   window.location.href = 'http://127.0.0.1:5000/login';
 }
 
+function logout() {
+  window.location.href = 'http://127.0.0.1:5000/';
+}
+
 
 function pageTextPopupEffect(pageId) {
   gsap.from(`${pageId} .elem h1`, {
