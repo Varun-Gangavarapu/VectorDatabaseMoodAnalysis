@@ -1,9 +1,10 @@
-from flask import Flask, redirect, request
-from lyrics import getSentiment
+from flask import Flask, redirect, request, render_template, url_for
+from flask_cors import CORS
 import requests
 import base64
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
 
 # Spotify API credentials
 CLIENT_ID = '3a8e09e2d4344d69b2d18676ab1e2b87'
@@ -11,15 +12,14 @@ CLIENT_SECRET = '02f562a80d1b4add8de4da6b6909ac13'
 REDIRECT_URI = 'http://localhost:5000/callback'
 SCOPE = 'user-read-recently-played'
 
-isrcSet=set()
 
-# @app.route('/')
-# def home():
-#     return 'Welcome to the Spotify API!'
 
 @app.route('/')
-def login():
+def home():
+    return 'Welcome to the Spotify API!'
 
+@app.route('/login')
+def login():
     auth_url = 'https://accounts.spotify.com/authorize'
     payload = {
         'client_id': CLIENT_ID,
@@ -28,13 +28,10 @@ def login():
         'scope': SCOPE
     }
     res = requests.get(auth_url, params=payload)
-
     return redirect(res.url)
 
 @app.route('/callback')
 def callback():
-    print("hello")
-
     code = request.args.get('code')
     if code:
         # Step 3: Request access token
@@ -70,22 +67,30 @@ def callback():
 
         try:
             recently_played_songs = res.json().get('items')
+            print(recently_played_songs)
         except (ValueError, requests.exceptions.JSONDecodeError) as e:
             return f'Error: {e}'
+
+        isrcarr = []
 
         if recently_played_songs:
             for song in recently_played_songs:
                 track_name = song['track']['name']
                 isrc = song['track']['external_ids']['isrc']
-                isrcSet.add(isrc)
-                getSentiment(isrc)
+                isrcarr.append(isrc)
+
                 print(f"{track_name} - ISRC: {isrc}")
 
-            return "Check the terminal"
+            print(isrcarr)
+            return redirect(url_for('redirection'))
         else:
             return "No recently played songs found."
 
     return 'Authentication failed'
+
+@app.route('/redirection')
+def redirection():
+    return render_template('page2.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
