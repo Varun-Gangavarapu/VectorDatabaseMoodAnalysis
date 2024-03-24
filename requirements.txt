@@ -11,6 +11,7 @@ fsspec==2024.3.1
 gast==0.5.4
 google-pasta==0.2.0
 grpcio==1.62.1
+gunicorn==21.2.0
 h5py==3.10.0
 huggingface-hub==0.21.4
 idna==3.6
