@@ -38,7 +38,10 @@ def makeJSON(tracks):
         metadata = {"track": track_name, "artist": artist_name}
         song_info = {"id": isrc, "metadata": metadata, "sentiment": getSentiment(isrc)}
 
-        songs.append(song_info)
+        if(getSentiment(isrc) != None):
+            songs.append(song_info)
+
+
     data = {"songs": songs}
     with open('dataRecentlyPlayed.json', 'w') as outfile:
             json.dump(data, outfile)
