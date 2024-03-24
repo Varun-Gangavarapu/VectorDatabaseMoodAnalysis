@@ -43,22 +43,8 @@ def makeJSON(tracks):
 
 
     data = {"songs": songs}
+
     with open('dataRecentlyPlayed.json', 'w') as outfile:
             json.dump(data, outfile)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return data

@@ -1,7 +1,8 @@
 from flask import Flask, redirect, request
 import requests
 import base64
-import audioFeaturesdb, lyricsRecentlyPlayed
+import lyricsRecentlyPlayed
+import audioFeaturesdb, test
 
 app = Flask(__name__)
 
@@ -72,8 +73,12 @@ def callback():
 
 
         if recently_played_songs:
-            audioFeaturesdb.getFeaturesRecent(recently_played_songs)
+            #audioFeaturesdb.getFeaturesRecent(recently_played_songs)
             lyricsRecentlyPlayed.makeJSON(recently_played_songs)
+            test.sentimentRecent()
+
+
+
 
             for song in recently_played_songs:
                 track_name = song['track']['name']
