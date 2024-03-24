@@ -10,6 +10,21 @@ def batchify(array, batch_size=100):
     return batches
 
 
+def get_normalized(values):
+    # Calculate the magnitude of the vector
+    magnitude = np.linalg.norm(values)
+
+    # Check if the magnitude is not zero to avoid division by zero
+    if magnitude != 0:
+        # Normalize the vector by dividing each element by the magnitude
+        normalized_vector = values / magnitude
+    else:
+        # If the magnitude is zero, return the original vector (to avoid division by zero)
+        normalized_vector = values
+
+    return normalized_vector
+
+
 def get_sentiment_values(dat, preprocess=True):
     if preprocess:
         # Filter out the entry with label 'neutral'
@@ -29,25 +44,14 @@ def get_sentiment_values(dat, preprocess=True):
         for j in range(i + 1, N):
             values.append(0.5 * (values[i] + values[j]))
 
-    # Calculate the magnitude of the vector
-    magnitude = np.linalg.norm(values)
-
-    # Check if the magnitude is not zero to avoid division by zero
-    if magnitude != 0:
-        # Normalize the vector by dividing each element by the magnitude
-        normalized_vector = values / magnitude
-    else:
-        # If the magnitude is zero, return the original vector (to avoid division by zero)
-        normalized_vector = values
-
-    return normalized_vector
+    return get_normalized(values)
 
 
 def get_audio_feature_values(dat):
     audio_features = []
     for key, value in dat.items():
         audio_features.append(float(value))
-    return audio_features
+    return get_normalized(audio_features)
 
 
 def compute_user_vector_sentiments(file_path):
@@ -88,15 +92,25 @@ def compute_user_vector_audio(file_path):
     songs = json_data['songs']
     batches = batchify(songs)
 
-    score_map = {"acousticness": 0.0,
-                 "danceability": 0.0,
-                 "energy": 0.0,
-                 "instrumentalness": 0.0,
-                 "liveness": 0.0,
-                 "loudness": 0.0,
-                 "speechiness": 0.0,
-                 "tempo": 0.0,
-                 "valence": 0.0}
+    feature_map = {"acousticness": 0.0,
+                   "danceability": 0.0,
+                   "energy": 0.0,
+                   "instrumentalness": 0.0,
+                   "liveness": 0.0,
+                   "loudness": 0.0,
+                   "speechiness": 0.0,
+                   "tempo": 0.0,
+                   "valence": 0.0}
+
+    for batch in batches:
+        for song in batch:
+            for key, value in song['features'].items():
+                feature_map[key] += value
+
+    values = []
+    for key, value in feature_map.items():
+        values.append(value)
+    return get_normalized(values).tolist()
 
 
 sentiments = [

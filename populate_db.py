@@ -33,7 +33,7 @@ def populate_sentiments_db(file_path):
 
 def populate_features_db(file_path):
     # Create a Vec_DB to connect to Pinecone
-    vec_db = Vec_DB()
+    vec_db = Vec_DB('828881e7-4432-4893-9a7a-dc8aadb53df9')
 
     # Open the JSON file and read its content
     with open(file_path, 'r') as file:
