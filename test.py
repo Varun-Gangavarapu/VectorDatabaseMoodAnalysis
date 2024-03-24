@@ -14,9 +14,7 @@ def sentimentRecent():
 
 
 
-
-    print(get_top_k_sentiments(user_sentiment,5))
-    print(user_songs)
+    return [user_songs, get_top_k_sentiments(user_sentiment,5)]
 
 
 
