@@ -18,7 +18,7 @@ SCOPE = 'user-read-recently-played'
 # def home():
 #     return 'Welcome to the Spotify API!'
 
-@app.route('/')
+@app.route('/login')
 def login():
     auth_url = 'https://accounts.spotify.com/authorize'
     payload = {
