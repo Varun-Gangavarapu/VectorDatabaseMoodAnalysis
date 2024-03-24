@@ -160,6 +160,23 @@ def view_sorted(input_string):
     sorted_results = sorted(zip(values, scaled_values), key=lambda x: -x[1])
     for val, scaled_val in sorted_results:
         print(f"{val:.2f} ({scaled_val:.2f}%)")
+def get_top_k_sentiments(values, k):
+    map = {}
+    for i in range(len(values)):
+        map[sentiments[i]] = values[i]
+
+    # Sort the dictionary by values
+    sorted_mapping = sorted(map.items(), key=lambda x: -x[1])
+
+    # Print the labels and values sorted by values
+    i = 0
+    top_k_sentiments = []
+    for label, value in sorted_mapping:
+        top_k_sentiments.append(label)
+        i += 1
+        if i == k:
+            break
+    return top_k_sentiments
 
 
 def get_string(arr):
