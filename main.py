@@ -9,7 +9,7 @@ app = Flask(__name__)
 # Spotify API credentials
 CLIENT_ID = '3a8e09e2d4344d69b2d18676ab1e2b87'
 CLIENT_SECRET = '02f562a80d1b4add8de4da6b6909ac13'
-REDIRECT_URI = 'https://spotifyhack.azurewebsites.net/callback'
+REDIRECT_URI = 'http://127.0.0.1:8000/callback'
 SCOPE = 'user-read-recently-played'
 
 
