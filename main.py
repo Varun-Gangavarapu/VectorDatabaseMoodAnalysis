@@ -110,7 +110,7 @@ def extract_songs(query_response):
 @app.route('/redirection')
 def redirection():
     arr = test.sentimentRecent()
-    print(arr)
+    # print(arr)
     arrs = extract_songs(arr[0])
 
     return render_template('page2.html', songs_array=arrs, emotion_array=arr[1])

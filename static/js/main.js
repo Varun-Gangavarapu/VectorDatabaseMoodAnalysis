@@ -59,6 +59,10 @@ function logout() {
   window.location.href = 'http://127.0.0.1:5000/';
 }
 
+function github() {
+  console.log("here")
+  window.location.href = "https://github.com/Varun-Gangavarapu/VectorDatabaseMoodAnalysis"
+}
 
 function pageTextPopupEffect(pageId) {
   gsap.from(`${pageId} .elem h1`, {
